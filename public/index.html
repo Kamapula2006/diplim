@@ -1,0 +1,2704 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КолледжПортал — Коммуникационная платформа</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&family=PT+Sans:wght@400;700&display=swap');
+
+        :root {
+            --primary: #1a3a5c;
+            --primary-dark: #0f2540;
+            --primary-light: #2a5a8c;
+            --accent: #c0392b;
+            --accent2: #e67e22;
+            --green: #27ae60;
+            --blue: #2980b9;
+            --purple: #8e44ad;
+            --bg: #f0f3f8;
+            --card: #fff;
+            --border: #d1d9e6;
+            --text: #1e2d3d;
+            --muted: #6b7c93;
+            --sidebar-w: 240px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'PT Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        #auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f2540 0%, #1a3a5c 50%, #1e5f8e 100%);
+        }
+
+        .auth-box {
+            background: #fff;
+            border-radius: 10px;
+            padding: 40px 48px;
+            width: 440px;
+            box-shadow: 0 12px 48px rgba(0,0,0,.3);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+            .auth-logo .li {
+                font-size: 48px;
+                margin-bottom: 8px;
+            }
+
+            .auth-logo h1 {
+                font-family: 'Bitter', serif;
+                font-size: 20px;
+                color: var(--primary);
+            }
+
+            .auth-logo p {
+                color: var(--muted);
+                font-size: 12px;
+                margin-top: 4px;
+            }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 22px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: .2s;
+        }
+
+            .auth-tab.active {
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+            }
+
+        .auth-err {
+            color: var(--accent);
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .fg {
+            margin-bottom: 14px;
+        }
+
+            .fg label {
+                display: block;
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--muted);
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                letter-spacing: .5px;
+            }
+
+            .fg input, .fg select, .fg textarea {
+                width: 100%;
+                padding: 9px 13px;
+                border: 1.5px solid var(--border);
+                border-radius: 6px;
+                font-family: 'PT Sans', sans-serif;
+                font-size: 14px;
+                color: var(--text);
+                outline: none;
+                transition: .2s;
+                background: #fafbfc;
+            }
+
+                .fg input:focus, .fg select:focus, .fg textarea:focus {
+                    border-color: var(--primary);
+                    background: #fff;
+                }
+
+            .fg textarea {
+                resize: vertical;
+            }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background: var(--primary-dark);
+            }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-danger {
+            background: var(--accent);
+            color: #fff;
+        }
+
+            .btn-danger:hover {
+                background: #a93226;
+            }
+
+        .btn-success {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+        }
+
+            .btn-outline:hover {
+                background: var(--bg);
+            }
+
+        .btn-ghost {
+            background: rgba(255,255,255,.12);
+            color: #fff;
+            border: none;
+        }
+
+            .btn-ghost:hover {
+                background: rgba(255,255,255,.22);
+            }
+
+        .btn-sm {
+            padding: 5px 11px;
+            font-size: 12px;
+        }
+
+        .btn-xs {
+            padding: 3px 8px;
+            font-size: 11px;
+        }
+
+        .topbar {
+            background: var(--primary);
+            color: #fff;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            gap: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.25);
+        }
+
+        .tb-brand {
+            font-family: 'Bitter', serif;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+            .tb-brand span {
+                color: #7ec8f5;
+            }
+
+        .tb-tagline {
+            font-size: 11px;
+            color: rgba(255,255,255,.5);
+            margin-top: 2px;
+        }
+
+        .tb-sp {
+            flex: 1;
+        }
+
+        .tb-search {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,.1);
+            border-radius: 6px;
+            padding: 6px 12px;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,.15);
+        }
+
+            .tb-search input {
+                background: none;
+                border: none;
+                outline: none;
+                color: #fff;
+                font-size: 13px;
+                width: 180px;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+                .tb-search input::placeholder {
+                    color: rgba(255,255,255,.5);
+                }
+
+        .tb-notif {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px;
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 1.5px solid var(--primary);
+        }
+
+        .tb-user {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .tb-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .tb-uname {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .tb-urole {
+            font-size: 11px;
+            color: rgba(255,255,255,.6);
+        }
+
+        #app {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--primary-dark);
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-nav {
+            padding: 16px 0;
+            flex: 1;
+        }
+
+        .nav-sec {
+            padding: 8px 18px 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,.3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            color: rgba(255,255,255,.72);
+            cursor: pointer;
+            font-size: 13px;
+            transition: .15s;
+            border-left: 3px solid transparent;
+        }
+
+            .nav-item:hover {
+                background: rgba(255,255,255,.07);
+                color: #fff;
+            }
+
+            .nav-item.active {
+                background: rgba(255,255,255,.11);
+                color: #fff;
+                border-left-color: #7ec8f5;
+            }
+
+        .nav-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 9px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 12px 18px;
+            border-top: 1px solid rgba(255,255,255,.1);
+            font-size: 11px;
+            color: rgba(255,255,255,.3);
+        }
+
+        .main {
+            margin-left: var(--sidebar-w);
+            margin-top: 56px;
+            padding: 24px;
+            min-height: calc(100vh - 56px);
+        }
+
+        .page {
+            display: none;
+        }
+
+            .page.active {
+                display: block;
+            }
+
+        .page-hdr {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .page-title {
+            font-family: 'Bitter', serif;
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .page-sub {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 18px 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 5px rgba(0,0,0,.05);
+        }
+
+        .card-title {
+            font-family: 'Bitter', serif;
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .stat-num {
+            font-family: 'Bitter', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .stat-delta {
+            font-size: 11px;
+            color: var(--green);
+            margin-top: 2px;
+        }
+
+        .pill-row {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .pill {
+            padding: 5px 13px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            color: var(--muted);
+            transition: .15s;
+        }
+
+            .pill.active, .pill:hover {
+                background: var(--primary);
+                color: #fff;
+                border-color: var(--primary);
+            }
+
+        .tab-strip {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .tab-item {
+            padding: 9px 18px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: .2s;
+        }
+
+            .tab-item.active {
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+            }
+
+        .ann-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--border);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+            transition: box-shadow .2s;
+        }
+
+            .ann-card:hover {
+                box-shadow: 0 3px 12px rgba(0,0,0,.1);
+            }
+
+            .ann-card.cat-urgent {
+                border-left-color: var(--accent);
+            }
+
+            .ann-card.cat-exam {
+                border-left-color: var(--accent2);
+            }
+
+            .ann-card.cat-event {
+                border-left-color: var(--green);
+            }
+
+            .ann-card.cat-general {
+                border-left-color: var(--blue);
+            }
+
+            .ann-card.cat-news {
+                border-left-color: var(--purple);
+            }
+
+        .ann-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .ann-cat {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .cat-urgent-b {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .cat-exam-b {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .cat-event-b {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .cat-general-b {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .cat-news-b {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .ann-date {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .ann-title {
+            font-family: 'Bitter', serif;
+            font-size: 16px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .ann-body {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .ann-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .ann-author {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .ann-pinned {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent2);
+        }
+
+        .forum-wrap {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            min-height: 640px;
+        }
+
+        .forum-left {
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fb;
+        }
+
+        .fleft-hdr {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .fleft-hdr-title {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--muted);
+        }
+
+        .forum-search {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .forum-search input {
+                width: 100%;
+                padding: 6px 10px;
+                border: 1.5px solid var(--border);
+                border-radius: 5px;
+                font-size: 12px;
+                outline: none;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+                .forum-search input:focus {
+                    border-color: var(--primary);
+                }
+
+        .forum-filter-row {
+            display: flex;
+            gap: 3px;
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .ff {
+            padding: 3px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--muted);
+            transition: .15s;
+        }
+
+            .ff.active {
+                background: var(--primary);
+                color: #fff;
+                border-color: var(--primary);
+            }
+
+        .topics-scroll {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .topic-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: .15s;
+        }
+
+            .topic-item:hover {
+                background: #eef1f7;
+            }
+
+            .topic-item.active {
+                background: var(--primary);
+                color: #fff;
+            }
+
+                .topic-item.active .t-sub, .topic-item.active .t-meta, .topic-item.active .ts {
+                    color: rgba(255,255,255,.7) !important;
+                }
+
+                .topic-item.active .ts-open, .topic-item.active .ts-solved {
+                    background: rgba(255,255,255,.2) !important;
+                    color: #fff !important;
+                }
+
+        .t-title-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .t-name {
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+
+        .t-sub {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .t-meta {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .ts {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .ts-open {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .ts-solved {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .t-cat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .forum-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .forum-topic-hdr {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfc;
+        }
+
+        .fth-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .fth-title {
+            font-family: 'Bitter', serif;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .fth-meta {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .forum-msgs-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 300px;
+            max-height: 430px;
+        }
+
+        .fmsg {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+        }
+
+            .fmsg.msg-op {
+                background: #f0f7ff;
+                border-color: #bfdbfe;
+            }
+
+            .fmsg.msg-teacher {
+                background: #fffbeb;
+                border-color: #fde68a;
+            }
+
+            .fmsg.msg-admin {
+                background: #fff1f2;
+                border-color: #fecdd3;
+            }
+
+        .fmsg-hdr {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 7px;
+            flex-wrap: wrap;
+        }
+
+        .fav {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .fsender {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .ftag-t {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .ftag-a {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .ftag-op {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .ftime {
+            font-size: 10px;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        .fmsg-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .forum-reply-area {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            background: #fafbfc;
+        }
+
+        .reply-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+            .reply-input-row textarea {
+                flex: 1;
+                padding: 8px 12px;
+                border: 1.5px solid var(--border);
+                border-radius: 6px;
+                font-size: 13px;
+                font-family: 'PT Sans', sans-serif;
+                resize: none;
+                outline: none;
+                min-height: 44px;
+            }
+
+                .reply-input-row textarea:focus {
+                    border-color: var(--primary);
+                }
+
+        .new-topic-form {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            background: #fff;
+            display: none;
+        }
+
+            .new-topic-form.open {
+                display: block;
+            }
+
+        .chat-wrap {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            min-height: 580px;
+        }
+
+        .chat-left {
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fb;
+        }
+
+        .cleft-hdr {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-search {
+            padding: 7px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .chat-search input {
+                width: 100%;
+                padding: 5px 9px;
+                border: 1.5px solid var(--border);
+                border-radius: 5px;
+                font-size: 12px;
+                outline: none;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+        .conv-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .conv-item {
+            padding: 10px 13px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: .15s;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+            .conv-item:hover {
+                background: #eef1f7;
+            }
+
+            .conv-item.active {
+                background: var(--primary);
+            }
+
+                .conv-item.active .conv-name, .conv-item.active .conv-preview, .conv-item.active .conv-time {
+                    color: #fff !important;
+                    opacity: 1;
+                }
+
+        .conv-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .conv-name {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .conv-preview {
+            font-size: 11px;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        .conv-time {
+            font-size: 10px;
+            color: var(--muted);
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .conv-unread {
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .chat-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-right-hdr {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 420px;
+            min-height: 300px;
+        }
+
+        .cmsg {
+            max-width: 70%;
+        }
+
+        .cmsg-in {
+            align-self: flex-start;
+        }
+
+        .cmsg-out {
+            align-self: flex-end;
+        }
+
+        .cmsg-bubble {
+            padding: 9px 13px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .cmsg-in .cmsg-bubble {
+            background: #f0f4f8;
+            border-radius: 2px 10px 10px 10px;
+        }
+
+        .cmsg-out .cmsg-bubble {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 10px 2px 10px 10px;
+        }
+
+        .cmsg-sender {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        .cmsg-time {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+            text-align: right;
+        }
+
+        .cmsg-out .cmsg-time {
+            color: rgba(255,255,255,.6);
+        }
+
+        .chat-input-row {
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            background: #fafbfc;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+            .chat-input-row textarea {
+                flex: 1;
+                padding: 8px 12px;
+                border: 1.5px solid var(--border);
+                border-radius: 6px;
+                font-size: 13px;
+                font-family: 'PT Sans', sans-serif;
+                resize: none;
+                outline: none;
+                min-height: 40px;
+            }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 16px;
+        }
+
+        .event-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            box-shadow: 0 1px 4px rgba(0,0,0,.04);
+            transition: box-shadow .2s;
+        }
+
+            .event-card:hover {
+                box-shadow: 0 3px 12px rgba(0,0,0,.1);
+            }
+
+        .event-date-box {
+            width: 54px;
+            flex-shrink: 0;
+            text-align: center;
+            background: var(--primary);
+            border-radius: 8px;
+            padding: 8px 4px;
+            color: #fff;
+        }
+
+        .event-day {
+            font-family: 'Bitter', serif;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .event-month {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            opacity: .8;
+        }
+
+        .event-body {
+            flex: 1;
+        }
+
+        .event-title {
+            font-family: 'Bitter', serif;
+            font-size: 15px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .event-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .event-tag {
+            font-size: 11px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mini-cal {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.04);
+        }
+
+        .cal-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cal-month {
+            font-family: 'Bitter', serif;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+
+        .cal-dow {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+            padding: 3px 0;
+            text-transform: uppercase;
+        }
+
+        .cal-day {
+            padding: 5px 2px;
+            font-size: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+            .cal-day:hover {
+                background: var(--bg);
+            }
+
+            .cal-day.today {
+                background: var(--primary);
+                color: #fff;
+                font-weight: 700;
+            }
+
+            .cal-day.has-event {
+                position: relative;
+            }
+
+                .cal-day.has-event::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 2px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 4px;
+                    height: 4px;
+                    background: var(--accent2);
+                    border-radius: 50%;
+                }
+
+            .cal-day.other-month {
+                color: var(--border);
+            }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .doc-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: box-shadow .2s;
+        }
+
+            .doc-card:hover {
+                box-shadow: 0 4px 16px rgba(0,0,0,.1);
+            }
+
+        .doc-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .doc-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .doc-meta {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .doc-type {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 6px;
+        }
+
+        .dtype-pdf {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .dtype-doc {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .dtype-xls {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .dtype-ppt {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .dtype-zip {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .profile-hdr {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .profile-av {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex-shrink: 0;
+        }
+
+        .profile-name {
+            font-family: 'Bitter', serif;
+            font-size: 19px;
+            color: var(--primary);
+        }
+
+        .profile-info {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .badge-role {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: #fff;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .badge-admin {
+            background: var(--accent);
+        }
+
+        .badge-teacher {
+            background: var(--accent2);
+        }
+
+        .badge-student {
+            background: var(--green);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .modal-overlay.open {
+                display: flex;
+            }
+
+        .modal {
+            background: #fff;
+            border-radius: 10px;
+            padding: 24px 28px;
+            width: 500px;
+            max-width: 96vw;
+            box-shadow: 0 16px 56px rgba(0,0,0,.22);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-family: 'Bitter', serif;
+            font-size: 17px;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .alert {
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead tr {
+            background: #f0f4f9;
+        }
+
+        th {
+            padding: 9px 12px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--muted);
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .offline-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--muted);
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+
+            .empty-state .esi {
+                font-size: 38px;
+                margin-bottom: 10px;
+            }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f4f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c0c8d4;
+            border-radius: 3px;
+        }
+    </style>
+<body>
+
+    <div id="auth-screen">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <div class="li">🎓</div>
+                <h1>КолледжПортал</h1>
+                <p>Платформа коммуникации и информационной поддержки</p>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Войти</div>
+                <div class="auth-tab" data-tab="register">Регистрация</div>
+            </div>
+            <div id="auth-err" class="auth-err"></div>
+            <div id="f-login">
+                <div class="fg"><label>Логин</label><input type="text" id="l-u" placeholder="Введите логин"></div>
+                <div class="fg"><label>Пароль</label><input type="password" id="l-p" placeholder="Введите пароль"></div>
+                <button class="btn btn-primary btn-full" id="login-btn">Войти</button>
+                <a href="#" id="forgot-pass-link" style="display:block; text-align:center; margin-top:12px; font-size:12px; color:var(--primary); text-decoration:none;">🔐 Забыли пароль?</a>
+            </div>
+            <div id="f-reg" style="display:none">
+                <div class="fg"><label>ФИО</label><input type="text" id="r-n" placeholder="Иванов Иван Иванович"></div>
+                <div class="fg">
+                    <label>Логин</label>
+                    <input type="text" id="r-u" placeholder="Придумайте логин" maxlength="20">
+                    <small style="color:var(--muted);font-size:12px;">3–20 символов: латинские буквы, цифры и "_"</small>
+                </div>
+                <div class="fg">
+                    <label>Пароль</label>
+                    <input type="password" id="r-p" placeholder="Придумайте пароль">
+                    <small style="color:var(--muted);font-size:12px;">Не менее 6 символов</small>
+                </div>
+                <div class="fg" id="r-gw">
+                    <label>Группа</label>
+                    <select id="r-g"><option>ПИ-21</option><option>ПИ-22</option><option>ЭК-21</option><option>ЮР-22</option><option>МЕД-21</option></select>
+                </div>
+                <button class="btn btn-primary btn-full" id="register-btn">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="topbar">
+            <div>
+                <div class="tb-brand">Колледж<span>Портал</span></div>
+                <div class="tb-tagline">Коммуникации и информационная поддержка</div>
+            </div>
+            <div class="tb-sp"></div>
+            <div class="tb-search">
+                <span>🔍</span>
+                <input type="text" id="global-search" placeholder="Поиск по платформе…">
+            </div>
+            <div class="tb-notif" id="notif-icon">
+                🔔<div class="notif-dot" id="notif-dot"></div>
+            </div>
+            <div class="tb-user">
+                <div class="tb-avatar" id="tb-av">👤</div>
+                <div><div class="tb-uname" id="tb-nm">—</div><div class="tb-urole" id="tb-rl">—</div></div>
+                <button class="btn btn-ghost btn-sm" id="logout-btn">Выйти</button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-nav" id="snav"></div>
+            <div class="sidebar-footer" id="sfooter"></div>
+        </div>
+
+        <div class="main">
+            <div class="page active" id="page-dashboard">
+                <div class="page-hdr">
+                    <div><div class="page-title" id="dash-title">Главная</div><div class="page-sub">Обзор платформы коммуникации</div></div>
+                    <div style="font-size:12px;color:var(--muted)" id="dash-datetime"></div>
+                </div>
+                <div class="grid-3" id="dash-stats" style="margin-bottom:18px"></div>
+                <div class="grid-2">
+                    <div>
+                        <div class="card"><div class="card-title">📌 Закреплённые объявления</div><div id="dash-pinned"></div></div>
+                        <div class="card"><div class="card-title">💬 Активные темы форума</div><div id="dash-topics"></div></div>
+                    </div>
+                    <div>
+                        <div class="card"><div class="card-title">📅 Ближайшие события</div><div id="dash-events"></div></div>
+                        <div class="card"><div class="card-title">👥 Кто онлайн</div><div id="dash-online"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="page-announcements">
+                <div class="page-hdr">
+                    <div><div class="page-title">📢 Объявления и новости</div><div class="page-sub">Информационные сообщения колледжа</div></div>
+                    <button class="btn btn-primary" id="btn-ann" style="display:none">✏️ Написать объявление</button>
+                </div>
+                <div class="pill-row" id="ann-filter-pills"></div>
+                <div id="ann-list"></div>
+            </div>
+
+            <div class="page" id="page-forum">
+                <div class="page-hdr"><div><div class="page-title">💬 Форум</div><div class="page-sub">Вопросы, обсуждения, взаимопомощь</div></div></div>
+                <div class="forum-wrap">
+                    <div class="forum-left">
+                        <div class="fleft-hdr">
+                            <span class="fleft-hdr-title">Темы</span>
+                            <button class="btn btn-primary btn-sm" id="new-topic-btn">+ Новая тема</button>
+                        </div>
+                        <div class="new-topic-form" id="ntf">
+                            <div class="fg"><label>Заголовок темы</label><input type="text" id="nt-ti" placeholder="Сформулируйте вопрос…"></div>
+                            <div class="fg">
+                                <label>Раздел</label>
+                                <select id="nt-ca">
+                                    <option value="question">❓ Вопрос</option>
+                                    <option value="discussion">💬 Обсуждение</option>
+                                    <option value="homework">📚 Домашнее задание</option>
+                                    <option value="announce">📢 Объявление</option>
+                                    <option value="event">🎉 Мероприятие</option>
+                                    <option value="other">📌 Другое</option>
+                                </select>
+                            </div>
+                            <div class="fg">
+                                <label>Для кого</label>
+                                <select id="nt-gr"><option value="">Для всех</option><option>ПИ-21</option><option>ПИ-22</option><option>ЭК-21</option><option>ЮР-22</option><option>МЕД-21</option></select>
+                            </div>
+                            <div class="fg"><label>Сообщение</label><textarea id="nt-bo" rows="3" placeholder="Опишите подробнее…"></textarea></div>
+                            <div style="display:flex;gap:6px">
+                                <button class="btn btn-primary btn-sm" id="create-topic-btn">Создать</button>
+                                <button class="btn btn-outline btn-sm" id="cancel-topic-btn">Отмена</button>
+                            </div>
+                        </div>
+                        <div class="forum-search"><input type="text" id="forum-search" placeholder="Поиск темы…"></div>
+                        <div class="forum-filter-row">
+                            <button class="ff active" data-filter="all">Все</button>
+                            <button class="ff" data-filter="open">Открытые</button>
+                            <button class="ff" data-filter="solved">Решённые</button>
+                            <button class="ff" data-filter="mine">Мои</button>
+                        </div>
+                        <div class="topics-scroll" id="topics-scroll"></div>
+                    </div>
+                    <div class="forum-right">
+                        <div class="forum-topic-hdr">
+                            <div class="fth-top">
+                                <div><div class="fth-title" id="fth">Выберите тему</div><div class="fth-meta" id="ftm"></div></div>
+                                <div id="ft-acts"></div>
+                            </div>
+                        </div>
+                        <div class="forum-msgs-area" id="forum-msgs"></div>
+                        <div class="forum-reply-area">
+                            <div class="reply-input-row">
+                                <textarea id="f-reply" placeholder="Написать ответ…" rows="2"></textarea>
+                                <button class="btn btn-primary" id="send-reply-btn" style="height:44px;white-space:nowrap">↩ Ответить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="page-messages">
+                <div class="page-hdr"><div><div class="page-title">✉️ Личные сообщения</div><div class="page-sub">Прямая переписка между пользователями</div></div></div>
+                <div class="chat-wrap">
+                    <div class="chat-left">
+                        <div class="cleft-hdr">Диалоги <span id="chat-unread-count"></span></div>
+                        <div class="chat-search"><input type="text" id="chat-search" placeholder="Найти диалог…"></div>
+                        <div class="conv-list" id="conv-list"></div>
+                    </div>
+                    <div class="chat-right">
+                        <div class="chat-right-hdr">
+                            <div class="tb-avatar" id="chat-conv-av">💬</div>
+                            <div>
+                                <div style="font-weight:700;font-size:14px" id="chat-conv-name">Выберите диалог</div>
+                                <div style="font-size:11px;color:var(--muted)" id="chat-conv-status"></div>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chat-msgs"></div>
+                        <div class="chat-input-row">
+                            <textarea id="chat-input" placeholder="Написать сообщение…" rows="2"></textarea>
+                            <button class="btn btn-primary" id="send-chat-btn" style="height:44px">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="page-events">
+                <div class="page-hdr">
+                    <div><div class="page-title">📅 Мероприятия и события</div><div class="page-sub">Календарь учебных событий колледжа</div></div>
+                    <button class="btn btn-primary" id="btn-event" style="display:none">+ Событие</button>
+                </div>
+                <div id="event-filter-pills"></div>
+                <div class="events-grid">
+                    <div id="events-list"></div>
+                    <div>
+                        <div class="mini-cal card" style="padding:16px">
+                            <div class="cal-hdr">
+                                <button class="btn btn-outline btn-sm" id="prev-month-btn">‹</button>
+                                <div class="cal-month" id="cal-month-label"></div>
+                                <button class="btn btn-outline btn-sm" id="next-month-btn">›</button>
+                            </div>
+                            <div class="cal-grid" id="cal-grid"></div>
+                        </div>
+                        <div class="card"><div class="card-title">📊 Типы событий</div><div id="event-legend"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="page-docs">
+                <div class="page-hdr">
+                    <div><div class="page-title">📁 Информационные материалы</div><div class="page-sub">Учебные документы, шаблоны, нормативные акты</div></div>
+                    <button class="btn btn-primary" id="btn-doc" style="display:none">+ Добавить</button>
+                </div>
+                <div class="tab-strip" id="doc-tabs"></div>
+                <div id="docs-grid"></div>
+            </div>
+
+            <div class="page" id="page-notifications">
+                <div class="page-hdr">
+                    <div><div class="page-title">🔔 Уведомления</div><div class="page-sub">Все активности на платформе</div></div>
+                    <button class="btn btn-outline btn-sm" id="mark-read-btn">Отметить все прочитанными</button>
+                </div>
+                <div id="notif-list"></div>
+            </div>
+
+            <div class="page" id="page-users">
+                <div class="page-hdr"><div><div class="page-title">👥 Участники платформы</div><div class="page-sub">Пользователи и их роли</div></div></div>
+                <div class="pill-row" id="users-filter"></div>
+                <div class="card"><table><thead><tr><th>ФИО</th><th>Логин</th><th>Роль</th><th>Группа</th><th></th></tr></thead><tbody id="users-tb"></tbody></table></div>
+            </div>
+
+            <div class="page" id="page-profile">
+                <div class="page-hdr"><div><div class="page-title">👤 Личный кабинет</div></div></div>
+                <div class="profile-hdr">
+                    <div class="profile-av" id="pr-av">👤</div>
+                    <div>
+                        <div class="profile-name" id="pr-nm">—</div>
+                        <div class="profile-info" id="pr-inf">—</div>
+                        <div id="pr-badge"></div>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">Редактировать профиль</div>
+                        <div class="fg"><label>ФИО</label><input type="text" id="pr-ni"></div>
+                        <div class="fg"><label>О себе</label><textarea id="pr-bio" rows="2" placeholder="Краткая информация о вас…"></textarea></div>
+                        <div class="fg"><label>Новый пароль</label><input type="password" id="pr-pi" placeholder="Оставьте пустым чтобы не менять"><small style="color:var(--muted);font-size:12px;">Не менее 6 символов</small></div>
+                        <div id="pr-alert"></div>
+                        <button class="btn btn-primary" id="save-profile-btn">💾 Сохранить</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Моя активность</div>
+                        <div id="pr-activity"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Настройки уведомлений</div>
+                    <div id="pr-notif-settings"></div>
+                </div>
+            </div>
+
+            <div class="page" id="page-search">
+                <div class="page-hdr"><div><div class="page-title">🔍 Результаты поиска</div><div class="page-sub" id="search-sub">—</div></div></div>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="m-ann">
+        <div class="modal">
+            <div class="modal-title">✏️ Новое объявление</div>
+            <div class="fg"><label>Заголовок</label><input type="text" id="ma-ti" placeholder="Заголовок объявления"></div>
+            <div class="fg"><label>Текст</label><textarea id="ma-bo" rows="5" placeholder="Подробный текст…"></textarea></div>
+            <div class="grid-2">
+                <div class="fg">
+                    <label>Категория</label>
+                    <select id="ma-ca">
+                        <option value="general">📌 Общее</option>
+                        <option value="urgent">🚨 Срочно</option>
+                        <option value="exam">📝 Экзамен/Зачёт</option>
+                        <option value="event">🎉 Мероприятие</option>
+                        <option value="news">📰 Новость</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Адресат</label>
+                    <select id="ma-to">
+                        <option value="">Всем</option>
+                        <option value="students">Только студентам</option>
+                        <option value="teachers">Только преподавателям</option>
+                        <option>ПИ-21</option>
+                        <option>ПИ-22</option>
+                        <option>ЭК-21</option>
+                        <option>ЮР-22</option>
+                        <option>МЕД-21</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fg" style="display:flex;align-items:center;gap:10px">
+                <input type="checkbox" id="ma-pin" style="width:auto">
+                <label style="text-transform:none;letter-spacing:0;font-size:13px;color:var(--text)">📌 Закрепить объявление</label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="close-ann-modal">Отмена</button>
+                <button class="btn btn-primary" id="add-ann-btn">Опубликовать</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="m-event">
+        <div class="modal">
+            <div class="modal-title">📅 Новое событие</div>
+            <div class="fg"><label>Название</label><input type="text" id="me-ti" placeholder="Название события"></div>
+            <div class="fg"><label>Описание</label><textarea id="me-bo" rows="3" placeholder="Подробное описание…"></textarea></div>
+            <div class="grid-2">
+                <div class="fg"><label>Дата</label><input type="date" id="me-dt"></div>
+                <div class="fg"><label>Время</label><input type="time" id="me-tm"></div>
+            </div>
+            <div class="grid-2">
+                <div class="fg"><label>Место</label><input type="text" id="me-pl" placeholder="Актовый зал, Каб. 205…"></div>
+                <div class="fg">
+                    <label>Тип</label>
+                    <select id="me-tp">
+                        <option value="exam">📝 Экзамен/Зачёт</option>
+                        <option value="event">🎉 Мероприятие</option>
+                        <option value="meeting">🤝 Собрание</option>
+                        <option value="deadline">⏰ Дедлайн</option>
+                        <option value="other">📌 Другое</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="close-event-modal">Отмена</button>
+                <button class="btn btn-primary" id="add-event-btn">Добавить событие</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="m-doc">
+        <div class="modal">
+            <div class="modal-title">📁 Добавить материал</div>
+            <div class="fg"><label>Название</label><input type="text" id="md-nm" placeholder="Название документа"></div>
+            <div class="fg"><label>Описание</label><input type="text" id="md-ds" placeholder="Краткое описание…"></div>
+            <div class="grid-2">
+                <div class="fg">
+                    <label>Раздел</label>
+                    <select id="md-ca">
+                        <option value="regulatory">⚖️ Нормативные акты</option>
+                        <option value="educational">📚 Учебные материалы</option>
+                        <option value="templates">📋 Шаблоны и бланки</option>
+                        <option value="schedule">📅 Расписание</option>
+                        <option value="other">📌 Другое</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Формат файла</label>
+                    <select id="md-ft">
+                        <option value="pdf">PDF</option>
+                        <option value="doc">DOC/DOCX</option>
+                        <option value="xls">XLS/XLSX</option>
+                        <option value="ppt">PPT/PPTX</option>
+                        <option value="zip">ZIP/RAR</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fg">
+                <label>Доступ</label>
+                <select id="md-ac">
+                    <option value="">Всем</option>
+                    <option value="students">Студентам</option>
+                    <option value="teachers">Преподавателям</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="close-doc-modal">Отмена</button>
+                <button class="btn btn-primary" id="add-doc-btn">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="m-reset">
+        <div class="modal">
+            <div class="modal-title">Восстановление пароля</div>
+            <div class="fg"><label>Ваш логин</label><input type="text" id="reset-login" placeholder="Введите логин"></div>
+            <div class="fg"><label>Новый пароль</label><input type="password" id="reset-pass" placeholder="Придумайте новый пароль"><small style="color:var(--muted);font-size:12px;">Не менее 6 символов</small></div>
+            <div id="reset-msg" style="font-size:12px; color:red; margin-bottom:10px;"></div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="close-reset-modal">Отмена</button>
+                <button class="btn btn-primary" id="reset-password-btn">Сбросить пароль</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+(function(){
+    // ── API helper ────────────────────────────────────────────────────────────
+    const api = {
+        async get(url) {
+            const r = await fetch(url);
+            if (!r.ok) throw await r.json();
+            return r.json();
+        },
+        async post(url, data) {
+            const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+            const json = await r.json();
+            if (!r.ok) throw json;
+            return json;
+        },
+        async put(url, data) {
+            const r = await fetch(url, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+            const json = await r.json();
+            if (!r.ok) throw json;
+            return json;
+        },
+        async del(url) {
+            const r = await fetch(url, { method:'DELETE' });
+            if (!r.ok) throw await r.json();
+            return r.json();
+        }
+    };
+
+    const GROUPS = ['ПИ-21','ПИ-22','ЭК-21','ЮР-22','МЕД-21'];
+    const ANN_CATS = { general:'📌 Общее', urgent:'🚨 Срочно', exam:'📝 Экзамен', event:'🎉 Мероприятие', news:'📰 Новость' };
+    const FORUM_CATS = { question:'❓ Вопрос', discussion:'💬 Обсуждение', homework:'📚 ДЗ', announce:'📢 Объявление', event:'🎉 Событие', other:'📌 Другое' };
+    const EVENT_TYPES = { exam:'📝 Экзамен', event:'🎉 Мероприятие', meeting:'🤝 Собрание', deadline:'⏰ Дедлайн', other:'📌 Другое' };
+    const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    const DOW = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+    let CU = null;
+    let curTopic = null;
+    let curConv = null;
+    let forumFilter = 'all';
+    let annFilter = 'all';
+    let docTab = 'all';
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth();
+    let eventFilter = 'all';
+    let allTopics = [];
+    let allConvs = [];
+
+    function td(){ return new Date().toISOString().split('T')[0]; }
+
+    // ── AUTH ──────────────────────────────────────────────────────────────────
+    function switchAuthTab(tab){
+        document.querySelectorAll('.auth-tab').forEach((el,i)=>{
+            const isActive = (i===0 && tab==='login') || (i===1 && tab==='register');
+            el.classList.toggle('active', isActive);
+        });
+        document.getElementById('f-login').style.display = tab==='login'?'block':'none';
+        document.getElementById('f-reg').style.display = tab==='register'?'block':'none';
+        document.getElementById('auth-err').style.display = 'none';
+    }
+
+    function showAErr(m){
+        const e=document.getElementById('auth-err');
+        e.textContent=m; e.style.display='block';
+        setTimeout(()=>{ e.style.display='none'; }, 3000);
+    }
+
+    async function doLogin(){
+        const u=document.getElementById('l-u').value.trim();
+        const p=document.getElementById('l-p').value;
+        try {
+            CU = await api.post('/api/login', { username:u, password:p });
+            startApp();
+        } catch(e) { showAErr(e.error || 'Ошибка входа'); }
+    }
+
+    async function doRegister(){
+        const name=document.getElementById('r-n').value.trim();
+        const username=document.getElementById('r-u').value.trim();
+        const password=document.getElementById('r-p').value;
+        const grp=document.getElementById('r-g').value;
+        if(!name || !username || !password){ showAErr('Заполните все поля'); return; }
+        if(!/^[a-zA-Z0-9_]{3,20}$/.test(username)){ showAErr('Логин: 3–20 символов, латинские буквы, цифры и "_"'); return; }
+        if(password.length<6){ showAErr('Пароль должен содержать не менее 6 символов'); return; }
+        try {
+            CU = await api.post('/api/register', { name, username, password, grp });
+            startApp();
+        } catch(e) { showAErr(e.error || 'Ошибка регистрации'); }
+    }
+
+    async function doLogout(){
+        await api.post('/api/logout', {});
+        CU=null;
+        document.getElementById('app').style.display='none';
+        document.getElementById('auth-screen').style.display='flex';
+        document.getElementById('l-u').value='';
+        document.getElementById('l-p').value='';
+    }
+
+    function startApp(){
+        document.getElementById('auth-screen').style.display='none';
+        document.getElementById('app').style.display='block';
+        const em={admin:'⚙️',teacher:'🎓',student:'📚'};
+        const rn={admin:'Администратор',teacher:'Преподаватель',student:'Студент'};
+        document.getElementById('tb-av').textContent=em[CU.role]||'👤';
+        document.getElementById('tb-nm').textContent=CU.name.split(' ')[0]+' '+((CU.name.split(' ')[1]||'')[0]||'')+'.';
+        document.getElementById('tb-rl').textContent=rn[CU.role]+(CU.grp?' · '+CU.grp:'');
+        buildSidebar();
+        showPage('dashboard');
+        updateNotifDot();
+        setInterval(updateDatetime,1000);
+        updateDatetime();
+    }
+
+    function updateDatetime(){
+        const el=document.getElementById('dash-datetime');
+        if(el){ const n=new Date(); el.textContent=n.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})+' '+n.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}); }
+    }
+
+    // ── SIDEBAR ───────────────────────────────────────────────────────────────
+    function buildSidebar(){
+        const rn={admin:'Администратор',teacher:'Преподаватель',student:'Студент'};
+        const items=[
+            {icon:'🏠',label:'Главная',page:'dashboard'},
+            {icon:'📢',label:'Объявления',page:'announcements'},
+            {icon:'💬',label:'Форум',page:'forum'},
+            {icon:'✉️',label:'Сообщения',page:'messages'},
+            {icon:'📅',label:'Мероприятия',page:'events'},
+            {icon:'📁',label:'Документы',page:'docs'},
+            {icon:'🔔',label:'Уведомления',page:'notifications'},
+            ...(CU.role==='admin'?[{icon:'👥',label:'Участники',page:'users'}]:[]),
+            {icon:'👤',label:'Мой профиль',page:'profile'},
+        ];
+        document.getElementById('snav').innerHTML=`
+            <div class="nav-sec">Навигация</div>
+            ${items.map(it=>`<div class="nav-item" data-page="${it.page}" onclick="showPage('${it.page}')"><span class="nav-icon">${it.icon}</span>${it.label}</div>`).join('')}
+        `;
+        document.getElementById('sfooter').innerHTML=`КолледжПортал 2026`;
+        if(CU.role!=='student'){
+            document.getElementById('btn-ann').style.display='';
+            document.getElementById('btn-event').style.display='';
+            document.getElementById('btn-doc').style.display='';
+        }
+    }
+
+    window.showPage = async function(page){
+        if(page==='users' && CU.role!=='admin') page='dashboard';
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        const pageEl=document.getElementById('page-'+page);
+        if(pageEl) pageEl.classList.add('active');
+        const navEl=document.querySelector(`.nav-item[data-page="${page}"]`);
+        if(navEl) navEl.classList.add('active');
+
+        if(page==='dashboard') await renderDashboard();
+        if(page==='announcements') await renderAnnouncements();
+        if(page==='forum') await renderTopics();
+        if(page==='messages') await renderConvList();
+        if(page==='events') await renderEvents();
+        if(page==='docs') await renderDocs();
+        if(page==='notifications') await renderNotifications();
+        if(page==='users') await renderUsers();
+        if(page==='profile') renderProfile();
+    };
+
+    // ── DASHBOARD ─────────────────────────────────────────────────────────────
+    async function renderDashboard(){
+        const rn={admin:'Администратор',teacher:'Преподаватель',student:'Студент'};
+        document.getElementById('dash-title').textContent=`Добро пожаловать, ${CU.name.split(' ')[1]||CU.name}!`;
+
+        try {
+            const [anns, topics, events, users] = await Promise.all([
+                api.get('/api/announcements'),
+                api.get('/api/topics'),
+                api.get('/api/events'),
+                api.get('/api/users')
+            ]);
+
+            const onlineUsers=users.filter(u=>u.online);
+            const upcomingEvents=events.filter(e=>e.date>=td()).slice(0,3);
+
+            document.getElementById('dash-stats').innerHTML=[
+                {icon:'📢',bg:'#dbeafe',label:'Объявлений',num:anns.length,clr:'#1e40af'},
+                {icon:'💬',bg:'#d1fae5',label:'Тем на форуме',num:topics.length,clr:'#065f46'},
+                {icon:'👥',bg:'#ede9fe',label:'Онлайн сейчас',num:onlineUsers.length,clr:'#5b21b6'},
+            ].map(s=>`<div class="stat-card"><div class="stat-icon" style="background:${s.bg};color:${s.clr}">${s.icon}</div><div><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div></div>`).join('');
+
+            const pinned=anns.filter(a=>a.pinned).slice(0,3);
+            const catB={urgent:'cat-urgent-b',exam:'cat-exam-b',event:'cat-event-b',general:'cat-general-b',news:'cat-news-b'};
+            document.getElementById('dash-pinned').innerHTML=pinned.length?pinned.map(a=>`<div style="padding:8px 0;border-bottom:1px solid var(--border)"><div class="ann-meta"><span class="ann-cat ${catB[a.cat]||''}">${ANN_CATS[a.cat]||a.cat}</span><span class="ann-date">${a.date}</span></div><div style="font-weight:700;font-size:13px;color:var(--primary);cursor:pointer" onclick="showPage('announcements')">${a.title}</div></div>`).join(''):'<div class="empty-state" style="padding:20px"><div class="esi">📢</div>Нет объявлений</div>';
+
+            const recentTopics=topics.slice(0,4);
+            document.getElementById('dash-topics').innerHTML=recentTopics.length?recentTopics.map(t=>`<div style="padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openTopicFromDash(${t.id})"><div style="font-weight:700;font-size:13px;color:var(--primary)">${t.title}</div><div style="font-size:11px;color:var(--muted)">${t.author} · ${t.replies||0} отв.</div></div>`).join(''):'<div class="empty-state" style="padding:20px">Нет тем</div>';
+
+            document.getElementById('dash-events').innerHTML=upcomingEvents.length?upcomingEvents.map(e=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-weight:700;font-size:13px">${EVENT_TYPES[e.type]||'📌'} ${e.title}</div><div style="font-size:11px;color:var(--muted)">${e.date}${e.time?' · '+e.time:''} · ${e.place}</div></div>`).join(''):'<div class="empty-state" style="padding:20px">Нет событий</div>';
+
+            document.getElementById('dash-online').innerHTML=onlineUsers.slice(0,6).map(u=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0"><span class="online-dot"></span><span style="font-size:13px">${u.name}</span></div>`).join('') || '<div class="empty-state" style="padding:20px">Нет онлайн</div>';
+        } catch(e){ console.error(e); }
+    }
+
+    // ── ОБЪЯВЛЕНИЯ ────────────────────────────────────────────────────────────
+    async function renderAnnouncements(){
+        try {
+            const anns = await api.get('/api/announcements');
+            const cats=['all','urgent','exam','event','general','news'];
+            const catNames={all:'Все',urgent:'🚨 Срочно',exam:'📝 Экзамены',event:'🎉 События',general:'📌 Общее',news:'📰 Новости'};
+            document.getElementById('ann-filter-pills').innerHTML=cats.map(c=>`<span class="pill ${annFilter===c?'active':''}" onclick="setAnnFilter('${c}')">${catNames[c]}</span>`).join('');
+            const filtered=annFilter==='all'?anns:anns.filter(a=>a.cat===annFilter);
+            const catB={urgent:'cat-urgent-b',exam:'cat-exam-b',event:'cat-event-b',general:'cat-general-b',news:'cat-news-b'};
+            document.getElementById('ann-list').innerHTML=filtered.length?filtered.map(a=>`
+                <div class="ann-card cat-${a.cat}">
+                    <div class="ann-meta">
+                        ${a.pinned?'<span class="ann-pinned">📌 Закреплено</span>':''}
+                        <span class="ann-cat ${catB[a.cat]||''}">${ANN_CATS[a.cat]||a.cat}</span>
+                        <span class="ann-date">${a.date}</span>
+                    </div>
+                    <div class="ann-title">${a.title}</div>
+                    <div class="ann-body">${a.body}</div>
+                    <div class="ann-footer">
+                        <span class="ann-author">👤 ${a.author}</span>
+                        ${(CU.role!=='student'&&(CU.role==='admin'||a.author_id===CU.id))?`<button class="btn btn-danger btn-xs" onclick="deleteAnn(${a.id})">Удалить</button>`:''}
+                    </div>
+                </div>`).join(''):'<div class="empty-state"><div class="esi">📢</div>Объявлений нет</div>';
+        } catch(e){ console.error(e); }
+    }
+
+    window.setAnnFilter = function(f){ annFilter=f; renderAnnouncements(); };
+
+    async function addAnn(){
+        const title=document.getElementById('ma-ti').value.trim();
+        const body=document.getElementById('ma-bo').value.trim();
+        const cat=document.getElementById('ma-ca').value;
+        const target=document.getElementById('ma-to').value;
+        const pinned=document.getElementById('ma-pin').checked;
+        if(!title||!body){ alert('Заполните поля'); return; }
+        try {
+            await api.post('/api/announcements', { title, body, cat, target, pinned });
+            closeModal('m-ann');
+            document.getElementById('ma-ti').value='';
+            document.getElementById('ma-bo').value='';
+            renderAnnouncements();
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    window.deleteAnn = async function(id){
+        if(!confirm('Удалить объявление?')) return;
+        try { await api.del('/api/announcements/'+id); renderAnnouncements(); }
+        catch(e){ alert(e.error||'Ошибка'); }
+    };
+
+    // ── ФОРУМ ─────────────────────────────────────────────────────────────────
+    async function renderTopics(q=''){
+        try {
+            allTopics = await api.get('/api/topics');
+            let list=allTopics;
+            if(forumFilter==='open') list=list.filter(t=>t.status==='open');
+            else if(forumFilter==='solved') list=list.filter(t=>t.status==='solved');
+            else if(forumFilter==='mine') list=list.filter(t=>t.author_id===CU.id);
+            if(q) list=list.filter(t=>t.title.toLowerCase().includes(q.toLowerCase()));
+            document.getElementById('topics-scroll').innerHTML=list.length?list.map(t=>`
+                <div class="topic-item ${curTopic&&curTopic.id===t.id?'active':''}" onclick="openTopic(${t.id})">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                        <div class="topic-title">${t.pinned?'📌 ':''}${t.title}</div>
+                        <span style="font-size:10px;background:#f0f3f8;padding:2px 6px;border-radius:9px;white-space:nowrap">${t.replies||0} отв.</span>
+                    </div>
+                    <div class="topic-meta">${t.author} · ${FORUM_CATS[t.cat]||t.cat}</div>
+                </div>`).join(''):'<div class="empty-state" style="padding:20px;font-size:12px">Тем нет</div>';
+        } catch(e){ console.error(e); }
+    }
+
+    window.openTopic = async function(id){
+        try {
+            const { topic, msgs } = await api.get(`/api/topics/${id}/messages`);
+            curTopic=topic;
+            document.getElementById('fth').textContent=topic.title;
+            document.getElementById('ftm').textContent=`${topic.author} · ${FORUM_CATS[topic.cat]||topic.cat} · ${topic.views} просм.`;
+            const roleLbl={admin:'Администратор',teacher:'Преподаватель',student:'Студент'};
+            document.getElementById('forum-msgs').innerHTML=msgs.length?msgs.map(m=>`
+                <div class="forum-msg ${m.role==='teacher'||m.role==='admin'?'forum-msg-teacher':''}">
+                    <div class="fmsg-header">
+                        <span class="fmsg-author">${m.author}</span>
+                        <span class="fmsg-role">${roleLbl[m.role]||m.role}</span>
+                        <span class="fmsg-date">${m.date} ${m.time}</span>
+                    </div>
+                    <div class="fmsg-text" style="white-space:pre-wrap">${m.text}</div>
+                </div>`).join(''):'<div class="empty-state">Нет сообщений</div>';
+            document.getElementById('forum-msgs').scrollTop=99999;
+            renderTopics(document.getElementById('forum-search').value);
+        } catch(e){ console.error(e); }
+    };
+
+    window.openTopicFromDash = function(id){ showPage('forum'); setTimeout(()=>openTopic(id),200); };
+
+    function toggleNTF(){
+        const f=document.getElementById('ntf');
+        f.style.display=f.style.display==='block'?'none':'block';
+    }
+
+    async function createTopic(){
+        const title=document.getElementById('nt-ti').value.trim();
+        const cat=document.getElementById('nt-ca').value;
+        const grp=document.getElementById('nt-gr').value;
+        const body=document.getElementById('nt-bo').value.trim();
+        if(!title){ alert('Введите заголовок'); return; }
+        try {
+            const topic = await api.post('/api/topics', { title, cat, grp });
+            if(body){ await api.post(`/api/topics/${topic.id}/messages`, { text:body }); }
+            document.getElementById('nt-ti').value='';
+            document.getElementById('nt-bo').value='';
+            toggleNTF();
+            await renderTopics();
+            openTopic(topic.id);
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    async function sendReply(){
+        const text=document.getElementById('f-reply').value.trim();
+        if(!text||!curTopic) return;
+        try {
+            await api.post(`/api/topics/${curTopic.id}/messages`, { text });
+            document.getElementById('f-reply').value='';
+            openTopic(curTopic.id);
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    // ── СООБЩЕНИЯ ─────────────────────────────────────────────────────────────
+    async function renderConvList(){
+        try {
+            allConvs = await api.get('/api/conversations');
+            const q=document.getElementById('chat-search').value.toLowerCase();
+            const filtered=q?allConvs.filter(c=>c.other&&c.other.name.toLowerCase().includes(q)):allConvs;
+            const em={admin:'⚙️',teacher:'🎓',student:'📚'};
+            document.getElementById('conv-list').innerHTML=filtered.length?filtered.map(c=>`
+                <div class="conv-item ${curConv===c.id?'active':''}" onclick="openConv(${c.id})">
+                    <div class="conv-av">${em[c.other&&c.other.role]||'👤'}</div>
+                    <div class="conv-info">
+                        <div class="conv-name">${c.other?c.other.name:'Неизвестный'}</div>
+                        <div class="conv-last">${c.last_msg||'Нет сообщений'}</div>
+                    </div>
+                    <div style="font-size:10px;color:var(--muted)">${c.last_time?c.last_time.split(' ')[1]||'':''}</div>
+                </div>`).join(''):'<div class="empty-state" style="padding:20px;font-size:12px">Нет диалогов</div>';
+        } catch(e){ console.error(e); }
+    }
+
+    window.openConv = async function(id){
+        curConv=id;
+        try {
+            const msgs = await api.get(`/api/conversations/${id}/messages`);
+            const conv=allConvs.find(c=>c.id===id);
+            const other=conv&&conv.other;
+            const em={admin:'⚙️',teacher:'🎓',student:'📚'};
+            if(other){
+                document.getElementById('chat-conv-av').textContent=em[other.role]||'👤';
+                document.getElementById('chat-conv-name').textContent=other.name;
+                document.getElementById('chat-conv-status').textContent=other.online?'🟢 Онлайн':'⚫ Офлайн';
+            }
+            document.getElementById('chat-msgs').innerHTML=msgs.length?msgs.map(m=>`
+                <div class="chat-msg ${m.author_id===CU.id?'chat-msg-out':'chat-msg-in'}">
+                    <div class="chat-bubble">${m.text}</div>
+                    <div class="chat-meta">${m.date} ${m.time}</div>
+                </div>`).join(''):'<div class="empty-state">Нет сообщений</div>';
+            document.getElementById('chat-msgs').scrollTop=99999;
+            renderConvList();
+        } catch(e){ console.error(e); }
+    };
+
+    async function sendChatMsg(){
+        const text=document.getElementById('chat-input').value.trim();
+        if(!text||!curConv) return;
+        try {
+            await api.post(`/api/conversations/${curConv}/messages`, { text });
+            document.getElementById('chat-input').value='';
+            openConv(curConv);
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    window.startConvWithUser = async function(uid){
+        if(uid===CU.id) return;
+        try {
+            const conv = await api.post('/api/conversations', { userId:uid });
+            allConvs=await api.get('/api/conversations');
+            curConv=conv.id;
+            showPage('messages');
+            setTimeout(()=>openConv(curConv),200);
+        } catch(e){ alert(e.error||'Ошибка'); }
+    };
+
+    // ── СОБЫТИЯ ───────────────────────────────────────────────────────────────
+    async function renderEvents(){
+        try {
+            const events = await api.get('/api/events');
+            const evColors={exam:'var(--accent)',event:'var(--green)',meeting:'var(--blue)',deadline:'var(--accent2)',other:'var(--muted)'};
+            const types=['all','exam','event','meeting','deadline','other'];
+            const typeNames={all:'Все',exam:'📝 Экзамены',event:'🎉 Мероприятия',meeting:'🤝 Собрания',deadline:'⏰ Дедлайны',other:'📌 Другое'};
+            document.getElementById('event-filter-pills').innerHTML=types.map(t=>`<span class="pill ${eventFilter===t?'active':''}" onclick="setEventFilter('${t}')">${typeNames[t]}</span>`).join('');
+            const filtered=eventFilter==='all'?events:events.filter(e=>e.type===eventFilter);
+            document.getElementById('events-list').innerHTML=filtered.length?filtered.map(e=>`
+                <div class="card" style="border-left:4px solid ${evColors[e.type]||'var(--muted)'}">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                        <div>
+                            <div style="font-weight:700;font-size:15px;color:var(--primary)">${EVENT_TYPES[e.type]||'📌'} ${e.title}</div>
+                            <div style="font-size:12px;color:var(--muted);margin-top:3px">📅 ${e.date}${e.time?' · ⏰ '+e.time:''} · 📍 ${e.place}</div>
+                            ${e.body?`<div style="font-size:13px;margin-top:6px">${e.body}</div>`:''}
+                        </div>
+                        ${CU.role!=='student'?`<button class="btn btn-danger btn-xs" onclick="deleteEvent(${e.id})">✕</button>`:''}
+                    </div>
+                </div>`).join(''):'<div class="empty-state"><div class="esi">📅</div>Нет событий</div>';
+            renderCalendar(events);
+            renderEventLegend();
+        } catch(e){ console.error(e); }
+    }
+
+    window.setEventFilter = function(f){ eventFilter=f; renderEvents(); };
+    window.deleteEvent = async function(id){
+        if(!confirm('Удалить событие?')) return;
+        try { await api.del('/api/events/'+id); renderEvents(); } catch(e){ alert(e.error||'Ошибка'); }
+    };
+
+    async function addEvent(){
+        const title=document.getElementById('me-ti').value.trim();
+        const date=document.getElementById('me-dt').value;
+        if(!title||!date){ alert('Заполните поля'); return; }
+        try {
+            await api.post('/api/events',{
+                title, body:document.getElementById('me-bo').value,
+                date, time:document.getElementById('me-tm').value,
+                place:document.getElementById('me-pl').value, type:document.getElementById('me-tp').value
+            });
+            closeModal('m-event');
+            ['me-ti','me-bo','me-pl'].forEach(id=>document.getElementById(id).value='');
+            renderEvents();
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    function renderCalendar(events){
+        document.getElementById('cal-month-label').textContent=MONTHS[calMonth]+' '+calYear;
+        const firstDay=new Date(calYear,calMonth,1).getDay();
+        const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+        const offset=(firstDay+6)%7;
+        const eventDates=new Set(events.filter(e=>{
+            const d=new Date(e.date);
+            return d.getFullYear()===calYear&&d.getMonth()===calMonth;
+        }).map(e=>parseInt(e.date.split('-')[2])));
+        let html=DOW.map(d=>`<div style="font-size:10px;font-weight:700;color:var(--muted);text-align:center;padding:3px">${d}</div>`).join('');
+        for(let i=0;i<offset;i++) html+=`<div></div>`;
+        const today=new Date(); const todayD=today.getDate(); const todayM=today.getMonth(); const todayY=today.getFullYear();
+        for(let d=1;d<=daysInMonth;d++){
+            const isToday=d===todayD&&calMonth===todayM&&calYear===todayY;
+            const hasEv=eventDates.has(d);
+            html+=`<div style="text-align:center;padding:4px;font-size:12px;border-radius:50%;${isToday?'background:var(--primary);color:#fff;font-weight:700':''}${hasEv&&!isToday?'font-weight:700;color:var(--accent)':''}">${d}${hasEv?'·':''}</div>`;
+        }
+        document.getElementById('cal-grid').innerHTML=html;
+    }
+
+    function renderEventLegend(){
+        const items=Object.entries(EVENT_TYPES);
+        document.getElementById('event-legend').innerHTML=items.map(([k,v])=>`<div style="font-size:12px;padding:4px 0">${v}</div>`).join('');
+    }
+
+    window.prevMonth=function(){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} api.get('/api/events').then(ev=>renderCalendar(ev)); };
+    window.nextMonth=function(){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} api.get('/api/events').then(ev=>renderCalendar(ev)); };
+
+    // ── ДОКУМЕНТЫ ─────────────────────────────────────────────────────────────
+    async function renderDocs(){
+        try {
+            const docs = await api.get('/api/docs');
+            const cats=['all','regulatory','educational','templates','schedule','other'];
+            const catNames={all:'Все',regulatory:'⚖️ Нормативные',educational:'📚 Учебные',templates:'📋 Шаблоны',schedule:'📅 Расписание',other:'📌 Другое'};
+            document.getElementById('doc-tabs').innerHTML=cats.map(c=>`<div class="tab-item ${docTab===c?'active':''}" onclick="setDocTab('${c}')">${catNames[c]}</div>`).join('');
+            const filtered=docTab==='all'?docs:docs.filter(d=>d.cat===docTab);
+            const ftIcons={pdf:'📄',doc:'📝',xls:'📊',ppt:'📊',zip:'📦'};
+            document.getElementById('docs-grid').innerHTML=filtered.length?`<div class="grid-3">${filtered.map(d=>`
+                <div class="card">
+                    <div style="font-size:28px;margin-bottom:8px">${ftIcons[d.ftype]||'📄'}</div>
+                    <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:4px">${d.name}</div>
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${d.description}</div>
+                    <div style="font-size:11px;color:var(--muted)">👤 ${d.author} · 📥 ${d.downloads}</div>
+                    ${CU.role!=='student'?`<button class="btn btn-danger btn-xs" style="margin-top:8px" onclick="deleteDoc(${d.id})">Удалить</button>`:''}
+                </div>`).join('')}</div>`:'<div class="empty-state"><div class="esi">📁</div>Документов нет</div>';
+        } catch(e){ console.error(e); }
+    }
+
+    window.setDocTab=function(t){ docTab=t; renderDocs(); };
+    window.deleteDoc=async function(id){
+        if(!confirm('Удалить документ?')) return;
+        try { await api.del('/api/docs/'+id); renderDocs(); } catch(e){ alert(e.error||'Ошибка'); }
+    };
+
+    async function addDoc(){
+        const name=document.getElementById('md-nm').value.trim();
+        if(!name){ alert('Введите название'); return; }
+        try {
+            await api.post('/api/docs',{
+                name, description:document.getElementById('md-ds').value,
+                cat:document.getElementById('md-ca').value, ftype:document.getElementById('md-ft').value,
+                access:document.getElementById('md-ac').value
+            });
+            closeModal('m-doc');
+            document.getElementById('md-nm').value='';
+            document.getElementById('md-ds').value='';
+            renderDocs();
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    // ── УВЕДОМЛЕНИЯ ───────────────────────────────────────────────────────────
+    async function renderNotifications(){
+        try {
+            const notifs = await api.get('/api/notifications');
+            document.getElementById('notif-list').innerHTML=notifs.length?notifs.map(n=>`
+                <div class="card" style="display:flex;gap:12px;align-items:flex-start;${n.is_read?'opacity:.6':''}">
+                    <div style="font-size:22px">${n.icon}</div>
+                    <div>
+                        <div style="font-size:13px;font-weight:${n.is_read?'400':'700'}">${n.text}</div>
+                        <div style="font-size:11px;color:var(--muted);margin-top:3px">${n.date}</div>
+                    </div>
+                    ${!n.is_read?'<span style="margin-left:auto;width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0;margin-top:5px"></span>':''}
+                </div>`).join(''):'<div class="empty-state"><div class="esi">🔔</div>Уведомлений нет</div>';
+        } catch(e){ console.error(e); }
+    }
+
+    async function updateNotifDot(){
+        try {
+            const r = await api.get('/api/notifications/unread-count');
+            document.getElementById('notif-dot').style.display=r.count>0?'block':'none';
+        } catch(e){}
+    }
+
+    async function markAllRead(){
+        try {
+            await api.post('/api/notifications/read-all',{});
+            renderNotifications();
+            updateNotifDot();
+        } catch(e){}
+    }
+
+    // ── ПОЛЬЗОВАТЕЛИ ──────────────────────────────────────────────────────────
+    async function renderUsers(){
+        try {
+            const users = await api.get('/api/admin/users');
+            const rn={admin:'Администратор',teacher:'Преподаватель',student:'Студент'};
+            const rb={admin:'badge-admin',teacher:'badge-teacher',student:'badge-student'};
+            document.getElementById('users-tb').innerHTML=users.map(u=>`<tr>
+                <td><div><div style="font-weight:700">${u.name}</div>${u.bio?`<div style="font-size:11px;color:var(--muted)">${u.bio}</div>`:''}</div></td>
+                <td>${u.username}</td>
+                <td>
+                    ${u.id!==CU.id?`
+                        <select class="role-select" onchange="changeUserRole(${u.id}, this.value)" style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);">
+                            <option value="student" ${u.role==='student'?'selected':''}>Студент</option>
+                            <option value="teacher" ${u.role==='teacher'?'selected':''}>Преподаватель</option>
+                            <option value="admin" ${u.role==='admin'?'selected':''}>Администратор</option>
+                        </select>
+                    `:`<span class="badge-role ${rb[u.role]||''}">${rn[u.role]||u.role}</span>`}
+                </td>
+                <td>${u.grp||'—'}</td>
+                <td>${u.id!==CU.id?`<button class="btn btn-outline btn-xs" onclick="startConvWithUser(${u.id})">✉️</button>`:''}</td>
+            </tr>`).join('');
+        } catch(e){ console.error(e); }
+    }
+
+    window.changeUserRole = async function(userId, role){
+        try {
+            await api.put(`/api/admin/users/${userId}/role`, { role });
+            await renderUsers();
+        } catch(e){ alert(e.error || 'Ошибка изменения роли'); }
+    };
+
+    // ── ПРОФИЛЬ ───────────────────────────────────────────────────────────────
+    function renderProfile(){
+        const em={admin:'⚙️',teacher:'🎓',student:'📚'};
+        const rn={admin:'Администратор',teacher:'Преподаватель',student:'Студент'};
+        const rb={admin:'badge-admin',teacher:'badge-teacher',student:'badge-student'};
+        document.getElementById('pr-av').textContent=em[CU.role]||'👤';
+        document.getElementById('pr-nm').textContent=CU.name;
+        document.getElementById('pr-inf').textContent=rn[CU.role]+(CU.grp?' · Группа '+CU.grp:'');
+        document.getElementById('pr-badge').innerHTML=`<span class="badge-role ${rb[CU.role]||''}">${rn[CU.role]}</span>`;
+        document.getElementById('pr-ni').value=CU.name;
+        document.getElementById('pr-bio').value=CU.bio||'';
+        document.getElementById('pr-pi').value='';
+    }
+
+    async function saveProfile(){
+        const name=document.getElementById('pr-ni').value.trim();
+        const bio=document.getElementById('pr-bio').value.trim();
+        const pass=document.getElementById('pr-pi').value;
+        if(!name){ document.getElementById('pr-alert').innerHTML='<div class="alert alert-error">ФИО не может быть пустым</div>'; return; }
+        if(pass && pass.length<6){ document.getElementById('pr-alert').innerHTML='<div class="alert alert-error">Пароль должен содержать не менее 6 символов</div>'; return; }
+        try {
+            CU = await api.put('/api/profile', { name, bio, password:pass||undefined });
+            document.getElementById('tb-nm').textContent=CU.name.split(' ')[0]+' '+((CU.name.split(' ')[1]||'')[0]||'')+'.';
+            document.getElementById('pr-alert').innerHTML='<div class="alert alert-success">✅ Данные сохранены!</div>';
+            setTimeout(()=>document.getElementById('pr-alert').innerHTML='',3000);
+            renderProfile();
+        } catch(e){ alert(e.error||'Ошибка'); }
+    }
+
+    // ── ПОИСК ─────────────────────────────────────────────────────────────────
+    async function doSearch(){
+        const q=document.getElementById('global-search').value.trim();
+        if(!q||q.length<2) return;
+        try {
+            const results = await api.get('/api/search?q='+encodeURIComponent(q));
+            document.getElementById('search-sub').textContent=`По запросу «${q}» найдено ${results.length} результатов`;
+            document.getElementById('search-results').innerHTML=results.length?results.map(r=>`
+                <div class="card" style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;margin-bottom:8px" onclick="showPage('${r.page}')">
+                    <div style="font-size:24px">${r.icon}</div>
+                    <div>
+                        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">${r.type}</div>
+                        <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:2px">${r.title}</div>
+                        <div style="font-size:12px;color:var(--muted)">${r.sub}</div>
+                    </div>
+                </div>`).join(''):'<div class="empty-state"><div class="esi">🔍</div>Ничего не найдено</div>';
+            showPage('search');
+        } catch(e){ console.error(e); }
+    }
+
+    // ── СБРОС ПАРОЛЯ ──────────────────────────────────────────────────────────
+    async function resetPassword(){
+        const username=document.getElementById('reset-login').value.trim();
+        const newPassword=document.getElementById('reset-pass').value.trim();
+        const msg=document.getElementById('reset-msg');
+        if(!username||!newPassword){ msg.innerText='Заполните оба поля'; return; }
+        if(newPassword.length<6){ msg.style.color='red'; msg.innerText='Пароль должен содержать не менее 6 символов'; return; }
+        msg.style.color='red';
+        try {
+            await api.post('/api/reset-password', { username, newPassword });
+            msg.style.color='green';
+            msg.innerText='Пароль изменён! Войдите с новым паролем.';
+            setTimeout(()=>{ closeModal('m-reset'); document.getElementById('reset-login').value=''; document.getElementById('reset-pass').value=''; msg.innerText=''; },1500);
+        } catch(e){ msg.innerText=e.error||'Ошибка'; }
+    }
+
+    function openModal(id){ document.getElementById(id).classList.add('open'); }
+    function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+    // ── Привязка событий ──────────────────────────────────────────────────────
+    document.querySelectorAll('.auth-tab').forEach(tab=>{
+        tab.addEventListener('click',()=>switchAuthTab(tab.dataset.tab));
+    });
+    document.getElementById('login-btn').addEventListener('click',doLogin);
+    document.getElementById('register-btn').addEventListener('click',doRegister);
+    document.getElementById('logout-btn').addEventListener('click',doLogout);
+    document.getElementById('forgot-pass-link').addEventListener('click',(e)=>{e.preventDefault();openModal('m-reset');});
+    document.getElementById('close-reset-modal').addEventListener('click',()=>closeModal('m-reset'));
+    document.getElementById('reset-password-btn').addEventListener('click',resetPassword);
+    document.getElementById('btn-ann').addEventListener('click',()=>openModal('m-ann'));
+    document.getElementById('close-ann-modal').addEventListener('click',()=>closeModal('m-ann'));
+    document.getElementById('add-ann-btn').addEventListener('click',addAnn);
+    document.getElementById('btn-event').addEventListener('click',()=>{ document.getElementById('me-dt').value=td(); openModal('m-event'); });
+    document.getElementById('close-event-modal').addEventListener('click',()=>closeModal('m-event'));
+    document.getElementById('add-event-btn').addEventListener('click',addEvent);
+    document.getElementById('btn-doc').addEventListener('click',()=>openModal('m-doc'));
+    document.getElementById('close-doc-modal').addEventListener('click',()=>closeModal('m-doc'));
+    document.getElementById('add-doc-btn').addEventListener('click',addDoc);
+    document.getElementById('new-topic-btn').addEventListener('click',toggleNTF);
+    document.getElementById('cancel-topic-btn').addEventListener('click',toggleNTF);
+    document.getElementById('create-topic-btn').addEventListener('click',createTopic);
+    document.getElementById('send-reply-btn').addEventListener('click',sendReply);
+    document.getElementById('send-chat-btn').addEventListener('click',sendChatMsg);
+    document.getElementById('mark-read-btn').addEventListener('click',markAllRead);
+    document.getElementById('save-profile-btn').addEventListener('click',saveProfile);
+    document.getElementById('global-search').addEventListener('keydown',e=>{ if(e.key==='Enter') doSearch(); });
+    document.getElementById('forum-search').addEventListener('input',e=>renderTopics(e.target.value));
+    document.getElementById('chat-search').addEventListener('input',()=>renderConvList());
+    document.getElementById('notif-icon').addEventListener('click',()=>showPage('notifications'));
+    document.getElementById('prev-month-btn').addEventListener('click',prevMonth);
+    document.getElementById('next-month-btn').addEventListener('click',nextMonth);
+    document.getElementById('chat-input').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg();} });
+    document.getElementById('f-reply').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply();} });
+    document.querySelectorAll('.ff').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const filter=btn.dataset.filter;
+            if(filter){ forumFilter=filter; document.querySelectorAll('.ff').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderTopics(document.getElementById('forum-search').value); }
+        });
+    });
+    document.querySelectorAll('.modal-overlay').forEach(m=>{
+        m.addEventListener('click',e=>{ if(e.target===m) closeModal(m.id); });
+    });
+
+    // ── Проверка сессии при загрузке ──────────────────────────────────────────
+    (async ()=>{
+        try {
+            const user = await api.get('/api/me');
+            if(user){ CU=user; startApp(); }
+        } catch(e){}
+    })();
+})();
+    </script>
+</body>
+</html>
